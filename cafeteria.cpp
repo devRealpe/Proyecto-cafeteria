@@ -8,6 +8,28 @@ struct Comida
     int cantidad;
 };
 
+void mostrarInventario(Comida inventario[], int cantidadProductos)
+{
+    for (int i = 0; i < cantidadProductos; i++)
+    {
+        cout << "Nombre: " << inventario[i].nombre << endl;
+        cout << "Precio: " << inventario[i].precio << endl;
+        cout << "Cantidad: " << inventario[i].cantidad << endl;
+        cout << "------------------------" << endl;
+    }
+}
+int buscarProducto(Comida inventario[], int cantidadProductos, string nombreBuscado)
+{
+    for (int i = 0; i < cantidadProductos; i++)
+    {
+        if (inventario[i].nombre == nombreBuscado)
+        {
+            return i; // producto encontrado
+        }
+    }
+    return -1; // no encontrado
+}
+
 int main()
 {
     Comida inventario[100];
@@ -130,25 +152,23 @@ int main()
                         string nombreProductoEliminar;
                         cout << "Ingrese el nombre del producto a eliminar: ";
                         cin >> nombreProductoEliminar;
-                        bool encontrado = false;
-                        for (int i = 0; i < cantidadProductos; i++)
+
+                        int indice = buscarProducto(inventario, cantidadProductos, nombreProductoEliminar);
+
+                        if (indice != -1)
                         {
-                            if (inventario[i].nombre == nombreProductoEliminar)
+                            for (int j = indice; j < cantidadProductos - 1; j++)
                             {
-                                encontrado = true;
-                                for (int j = i; j < cantidadProductos - 1; j++)
-                                {
-                                    inventario[j] = inventario[j + 1];
-                                }
-                                cantidadProductos--;
-                                cout << "Producto eliminado exitosamente!" << endl;
-                                break;
+                                inventario[j] = inventario[j + 1];
                             }
+                            cantidadProductos--;
+                            cout << "Producto eliminado exitosamente!" << endl;
                         }
-                        if (encontrado == false)
+                        else
                         {
                             cout << "Producto no encontrado" << endl;
                         }
+
                     }
                     else if (opcionGestionproducto == 3)
                     {
@@ -176,13 +196,7 @@ int main()
                     else if (opcionGestionproducto == 4)
                     {
                         cout << "Mostrar Inventario" << endl;
-                        for (int i = 0; i < cantidadProductos; i++)
-                        {
-                            cout << "Nombre: " << inventario[i].nombre << endl;
-                            cout << "Precio: " << inventario[i].precio << endl;
-                            cout << "Cantidad: " << inventario[i].cantidad << endl;
-                            cout << "------------------------" << endl;
-                        }
+                        mostrarInventario(inventario, cantidadProductos);
                     }
                     else if (opcionGestionproducto == 5)
                     {
@@ -227,7 +241,6 @@ int main()
             else if (opcionUsuario == 2)
             {
                 cout << "Realizar pedido" << endl;
-                // Aqui puedes agregar la logica para realizar un pedido
                 string nombreProductoPedido;
                 cout << "Ingrese el nombre del producto a pedir: ";
                 cin >> nombreProductoPedido;
